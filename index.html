@@ -1,16 +1,20 @@
-extends partial/layout.pug
+extends base
+
+block nav
+    - var pageName = "HOME"
+    include _partial/menu
+
+block header
+    - var pageHeader = __("site_index")
+    include _partial/body_header
+
 block content
-    .container
-        .row
-            include mixin/post.pug
-            +posts()
-block pagination
-    - var prev = page.prev_link
-    - var next = page.next_link
-    .paginator
-        if page.prev
-            a.prev(href=url_for(prev))
-                != __('prev')
-        if page.next
-            a.next(href=url_for(next))
-                != __('next')
+    div.body__content
+        each post in page.posts.toArray()
+            a(href=url_for(post.path), title=post.title).body__item.post__title
+                span!= post.title
+                span(class="archive_date")!= date(post.date)
+    div.body__pagination
+        div.pull-right!= paginator()
+    div#disqus_thread
+
